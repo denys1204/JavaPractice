@@ -1,5 +1,6 @@
 package org.example.services.auth;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.example.models.users.User;
 import org.example.repositories.users.IUserRepository;
 import org.example.utiles.ConsoleReader;
@@ -22,7 +23,7 @@ public class Authentication {
 
     public User authenticate(String login, String password) {
         Optional<User> user = repository.getUser(login);
-        if (user.isEmpty() || !user.get().getPassword().equals(password)) return null;
+        if (user.isEmpty() || !user.get().getPassword().equals(DigestUtils.sha256Hex(password))) return null;
         authenticatedUser = user.get();
         return authenticatedUser;
     }

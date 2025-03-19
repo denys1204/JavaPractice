@@ -19,18 +19,17 @@ public class Main {
         IVehicleRepository vehicleRepository = new IVehicleRepositoryImpl(userRepository);
         Authentication authentication = Authentication.getInstance(userRepository);
 
-        //while(true) {
-        //    UserInterface ui = authentication.authUser().getRole().equals("admin") ?
-        //            new AdminInterface(authentication, vehicleRepository, userRepository) :
-        //            new ClientInterface(authentication, vehicleRepository);
-        //    ui.show();
-        //}
+        while(true) {
+            UserInterface ui = authentication.authUser().getRole().equals("admin") ?
+                    new AdminInterface(authentication, vehicleRepository, userRepository) :
+                    new ClientInterface(authentication, vehicleRepository);
+            ui.show();
+        }
 
         //Scanner scanner = new Scanner(System.in);
         //String originalString = scanner.nextLine();
         //String sha256hex = DigestUtils.sha256Hex(originalString);
         //System.out.println("Original: " + originalString);
         //System.out.println("Hash: " + sha256hex);
-
     }
 }
