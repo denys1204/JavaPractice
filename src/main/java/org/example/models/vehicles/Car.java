@@ -26,4 +26,8 @@ public class Car extends Vehicle {
     public boolean equals(Object o) {
         return super.equals(o);
     }
+
+    public static Car createCar(String brand, String model, Integer year, Double price, boolean rented, String type) {
+        return new Car(brand, model, year, price, rented, type);
+    }
 }

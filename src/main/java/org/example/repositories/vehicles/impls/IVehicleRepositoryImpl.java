@@ -61,14 +61,15 @@ public class IVehicleRepositoryImpl implements IVehicleRepository {
         return true;
     }
 
-    //@Override
-    //public void addVehicle(Vehicle vehicle) {
-    //    vehicles.add(vehicle);
-    //}
+    @Override
+    public void addVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
+    }
 
     @Override
     public void removeVehicle(int idx) {
         vehicles.remove(idx);
+        save();
     }
 
     private List<Vehicle> loadFromFile() throws IOException {

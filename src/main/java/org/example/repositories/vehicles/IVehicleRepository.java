@@ -10,6 +10,6 @@ public interface IVehicleRepository {
     boolean returnVehicle(int idx);
     List<Vehicle> getVehicles();
     boolean save() throws IOException;
-    //void addVehicle(Vehicle vehicle);
+    void addVehicle(Vehicle vehicle);
     void removeVehicle(int idx);
 }

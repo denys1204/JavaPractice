@@ -17,6 +17,17 @@ public class ConsoleReader {
         }
     }
 
+    public static double readDouble() {
+        while(true) {
+            try {
+                double number = scanner.nextDouble();
+                scanner.nextLine();
+                return number;
+            } catch (InputMismatchException ignored) {scanner.nextLine();}
+            System.out.println("Proszę podać poprawny format.");
+        }
+    }
+
     public static String readString() {
         return scanner.nextLine();
     }

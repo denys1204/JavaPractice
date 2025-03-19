@@ -49,4 +49,8 @@ public class Motorcycle extends Vehicle {
     public int hashCode() {
         return Objects.hash(super.hashCode(), category);
     }
+
+    public static Motorcycle createMotorcycle(String brand, String model, Integer year, Double price, boolean rented, String type, String category) {
+        return new Motorcycle(brand, model, year, price, rented, type, category);
+    }
 }
