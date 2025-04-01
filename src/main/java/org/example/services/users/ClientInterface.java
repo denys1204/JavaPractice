@@ -14,12 +14,12 @@ public class ClientInterface extends UserInterface {
     @Override
     public void show() {
         User user = getAuthenticatedUser();
-        System.out.println("\n\t\t\t\t\tMiło Cię widzieć, " + user.getUsername() + ".\n");
+        System.out.println("\n\t\t\t\t\tMiło Cię widzieć, " + user.getLogin() + ".\n");
         while(true) {
             showListOfVehicles();
-            System.out.println(user.getRentedVehicleId() < 0 ?
-                    "Na razie nie wynajmujesz żadnych pojazdów." :
-                    ("W tym czasie wynajmujesz pojazd o indeksie " + (user.getRentedVehicleId() + 1) + ".") + "\n");
+            //System.out.println(user.getRentedVehicleId() < 0 ?
+            //        "Na razie nie wynajmujesz żadnych pojazdów." :
+            //        ("W tym czasie wynajmujesz pojazd o indeksie " + (user.getRentedVehicleId() + 1) + ".") + "\n");
 
             System.out.print("Proszę podać indeks pojazdu(-1, aby wylogować się): ");
             int vehicleId = readVehicleIndex();
@@ -32,13 +32,13 @@ public class ClientInterface extends UserInterface {
         }
     }
 
-    public boolean rentVehicle(int idx) {
-        return vehicleRepository.rentVehicle(idx);
-    }
-
-    public boolean returnVehicle(int idx) {
-        return vehicleRepository.returnVehicle(idx);
-    }
+    //public boolean rentVehicle(int idx) {
+    //    return vehicleRepository.rentVehicle(idx);
+    //}
+//
+    //public boolean returnVehicle(int idx) {
+    //    return vehicleRepository.returnVehicle(idx);
+    //}
 
     private int readVehicleIndex() {
         int vehicleId;
@@ -68,14 +68,14 @@ public class ClientInterface extends UserInterface {
         System.out.println();
         switch (choice) {
             case 1:
-                System.out.println(rentVehicle(vehicleIndex) ?
-                        "Pojazd został wynajęty." :
-                        "Pojazd nie jest dostępny lub już wynajmujesz pojazd.");
+                //System.out.println(rentVehicle(vehicleIndex) ?
+                //        "Pojazd został wynajęty." :
+                //        "Pojazd nie jest dostępny lub już wynajmujesz pojazd.");
                 break;
             case 2:
-                System.out.println(returnVehicle(vehicleIndex) ?
-                        "Pojazd został zwrócony." :
-                        "Pojazd nie był wynajęty.");
+                //System.out.println(returnVehicle(vehicleIndex) ?
+                //        "Pojazd został zwrócony." :
+                //        "Pojazd nie był wynajęty.");
                 break;
             default:
                 System.out.println("Powrót do głównego menu.");

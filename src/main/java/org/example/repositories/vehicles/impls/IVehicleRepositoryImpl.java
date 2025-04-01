@@ -1,91 +1,50 @@
 package org.example.repositories.vehicles.impls;
 
-import org.example.models.vehicles.core.Vehicle;
-import org.example.repositories.users.IUserRepository;
+import com.google.gson.reflect.TypeToken;
+import org.example.models.vehicles.Vehicle;
 import org.example.repositories.vehicles.IVehicleRepository;
-import org.example.services.auth.Authentication;
+import org.example.utiles.JsonFileStorage;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.example.utiles.FileManager.createFileIfNotExists;
+import java.util.Optional;
+import java.util.UUID;
 
 public class IVehicleRepositoryImpl implements IVehicleRepository {
-    private final String filePath = "src/main/resources/vehicles.csv";
+    private final String filePath = "vehicles.json";
     private final List<Vehicle> vehicles;
-    private final IUserRepository userRepository;
-    private final Authentication authentication;
+    private final JsonFileStorage<Vehicle> storage;
 
-    public IVehicleRepositoryImpl(IUserRepository userRepository) throws IOException {
-        createFileIfNotExists(filePath);
-        this.vehicles = loadFromFile();
-        this.userRepository = userRepository;
-        this.authentication = Authentication.getInstance(userRepository);
+    public IVehicleRepositoryImpl() {
+        this.storage = new JsonFileStorage<>(filePath, new TypeToken<List<Vehicle>>(){}.getType());
+        this.vehicles = new ArrayList<>(storage.load());
     }
 
     @Override
-    public boolean rentVehicle(int idx) {
-        if(vehicles.get(idx).isRented() || authentication.getAuthenticatedUser().getRentedVehicleId()!= -1) return false;
-        vehicles.get(idx).setRented(true);
-        authentication.getAuthenticatedUser().setRentedVehicleId(idx);
-        return userRepository.save() && save();
+    public List<Vehicle> findAll() {
+        return this.vehicles;
     }
 
     @Override
-    public boolean returnVehicle(int idx) {
-        if(authentication.getAuthenticatedUser().getRentedVehicleId() != idx) return false;
-        vehicles.get(idx).setRented(false);
-        authentication.getAuthenticatedUser().setRentedVehicleId(-1);
-        return userRepository.save() && save();
+    public Optional<Vehicle> findById(String id) {
+        return vehicles.stream().filter(vehicle -> vehicle.getId().equals(id)).findFirst();
     }
 
     @Override
-    public List<Vehicle> getVehicles() {
-        List<Vehicle> clone_vehicles = new ArrayList<>();
-        for(Vehicle vehicle : vehicles) clone_vehicles.add(vehicle.getClone());
-        return clone_vehicles;
-    }
-
-    @Override
-    public boolean save() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (Vehicle vehicle : vehicles) {
-                writer.write(vehicle.toCSV());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving vehicles.");
-            return false;
+    public Vehicle save(Vehicle vehicle) {
+        if (vehicle.getId() == null || vehicle.getId().isBlank()) {
+            vehicle.setId(UUID.randomUUID().toString());
+        } else {
+            deleteById(vehicle.getId());
         }
-        return true;
-    }
-
-    @Override
-    public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+        storage.save(vehicles);
+        return vehicle;
     }
 
     @Override
-    public void removeVehicle(int idx) {
-        vehicles.remove(idx);
-        save();
-    }
-
-    private List<Vehicle> loadFromFile() throws IOException {
-        List<Vehicle> vehicles = new ArrayList<>();
-
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(";");
-            if (parts.length < 6) continue;
-
-            Vehicle vehicle = Vehicle.fromCSV(parts);
-            if (vehicle != null) vehicles.add(vehicle);
-        }
-        reader.close();
-        return vehicles;
+    public void deleteById(String id) {
+        vehicles.removeIf(vehicle -> vehicle.getId().equals(id));
+        storage.save(this.vehicles);
     }
 }

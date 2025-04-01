@@ -1,7 +1,7 @@
 package org.example.services.users.core;
 
 import org.example.models.users.User;
-import org.example.models.vehicles.core.Vehicle;
+import org.example.models.vehicles.Vehicle;
 import org.example.repositories.vehicles.IVehicleRepository;
 import org.example.services.auth.Authentication;
 
@@ -26,7 +26,7 @@ public abstract class UserInterface {
     }
 
     protected List<Vehicle> getVehicles() {
-        return vehicleRepository.getVehicles();
+        return vehicleRepository.findAll();
     }
 
     protected User getAuthenticatedUser() {

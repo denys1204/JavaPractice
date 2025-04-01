@@ -1,8 +1,6 @@
 package org.example.services.users;
 
 import org.example.models.users.User;
-import org.example.models.vehicles.Car;
-import org.example.models.vehicles.Motorcycle;
 import org.example.repositories.users.IUserRepository;
 import org.example.repositories.vehicles.IVehicleRepository;
 import org.example.services.auth.Authentication;
@@ -22,7 +20,7 @@ public class AdminInterface extends UserInterface {
     @Override
     public void show() {
         User admin = getAuthenticatedUser();
-        System.out.println("\n\t\t\t\t\tWelcome to the admin panel, " + admin.getUsername() + ".\n");
+        System.out.println("\n\t\t\t\t\tWelcome to the admin panel, " + admin.getLogin() + ".\n");
 
         while (true) {
             System.out.println("1) Lista użytkowników\n2) Lista pojazdów");
@@ -41,7 +39,7 @@ public class AdminInterface extends UserInterface {
                 for (int i = 1; i < getAllUsersExceptAdmins().size() + 1; i++) {
                     User user = getAllUsersExceptAdmins().get(i - 1);
                     System.out.println(i + ") " + user);
-                    System.out.println("Wynajmowany pojazd: " + getRentedVehicle(user.getRentedVehicleId()) + "\n");
+                    //System.out.println("Wynajmowany pojazd: " + getRentedVehicle(user.getRentedVehicleId()) + "\n");
                 }
 
                 System.out.println("--------------------------------------------------------------------------------------------------------------------------------\n");
@@ -75,12 +73,12 @@ public class AdminInterface extends UserInterface {
                         continue;
                     }
                     System.out.println();
-                    if (vehicleRepository.getVehicles().get(vehicleId - 1).isRented()) {
-                        System.out.println("Nie można usunąć tego pojazdu z powodu wypożyczenia.");
-                    } else {
-                        vehicleRepository.removeVehicle(vehicleId - 1);
-                        System.out.println("Pojazd o indeksie " + vehicleId + " został usunięty.\n");
-                    }
+                    //if (vehicleRepository.findAll().get(vehicleId - 1).isRented()) {
+                    //    System.out.println("Nie można usunąć tego pojazdu z powodu wypożyczenia.");
+                    //} else {
+                    //    vehicleRepository.deleteById(vehicleId - 1);
+                    //    System.out.println("Pojazd o indeksie " + vehicleId + " został usunięty.\n");
+                    //}
                 }
                 else if (choice == -1)
                     System.out.println("Powrót do głównego menu.\n");
@@ -89,7 +87,7 @@ public class AdminInterface extends UserInterface {
     }
 
     public List<User> getAllUsersExceptAdmins() {
-        return userRepository.getUsers().stream()
+        return userRepository.findAll().stream()
                 .filter(user -> !user.getRole().equals("admin")).toList();
     }
 
@@ -150,7 +148,7 @@ public class AdminInterface extends UserInterface {
         double price = ConsoleReader.readDouble();
         System.out.println();
 
-        vehicleRepository.addVehicle(Car.createCar(brand, model, year, price, false,"Car"));
+        //vehicleRepository.addVehicle(Car.createCar(brand, model, year, price, false,"Car"));
     }
 
     private void addMotorcycle() {
@@ -172,6 +170,6 @@ public class AdminInterface extends UserInterface {
         String category = ConsoleReader.readString();
         System.out.println();
 
-        vehicleRepository.addVehicle(Motorcycle.createMotorcycle(brand, model, year, price, false, "Motorcycle", category));
+        //vehicleRepository.addVehicle(Motorcycle.createMotorcycle(brand, model, year, price, false, "Motorcycle", category));
     }
 }
